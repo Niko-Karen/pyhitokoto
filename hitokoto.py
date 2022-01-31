@@ -95,12 +95,7 @@ class Hito(object):
         excel.save(self.excel_name)
 
     def run(self):
-        tf = self.get_argv()
-        if not tf:
-            self.get_list()
-            self.write_to_excel(self.hito_list, self.who_list, self.from_list)
+        self.get_list()
+        self.write_to_excel(self.hito_list, self.who_list, self.from_list)
 
 
-if __name__ == '__main__':
-    hito = Hito()
-    hito.run()
