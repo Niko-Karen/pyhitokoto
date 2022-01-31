@@ -1,19 +1,21 @@
 # Pyhitokoto
-
+---
 ## 简介
+
 #### 一句话概括: **一个爬取一言数据并写入Excel的迷你爬虫**
 
 这是我第一次正式发布我的Python作品，虽有些简陋，但会间断维护加功能。
 
 ## 正文
-
+---
+### 命令行使用
 使用方法: ```python hitokoto.py -c <爬取句子数量> -e <保存的 Excel 文档名>```
 
 或者是: ```python hitokoto.py --count <爬取句子数量> --excel <保存的 Excel 文档名>```
 
 本“模块”已经加装[Alive-Progress](https://pypi.org/project/alive-progress/)进度条，请根据`requirement.txt`自行安装。
 
-
+---
 ### 代码内使用。
 
 很简单。
