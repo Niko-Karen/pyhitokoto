@@ -62,7 +62,7 @@ class Hito(object):
 
                 download()
 
-        for who in self.who_list:
+        for who in who_list:
             if who == None:
                 who_list[who_list.index(who)] = '未知'
 
@@ -82,7 +82,7 @@ class Hito(object):
         # 批量写入
 
         def write_data(y, data_list, name):
-            x = 1
+            x = 2
 
             with alive_bar(len(data_list), title='写入{}中……'.format(name)) as save:
                 for data in data_list:
@@ -101,3 +101,10 @@ class Hito(object):
     def run(self):
         hito_list, from_list, who_list = self.get_list()
         self.write_to_excel(hito_list, who_list, from_list)
+
+
+if __name__ == '__main__':
+    hito = Hito()
+    hito.count = 10
+    hito.excel_name = 'example.xlsx'
+    hito.run()
