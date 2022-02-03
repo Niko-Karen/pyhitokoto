@@ -21,6 +21,7 @@
 很简单。
 将仓库Clone下来，在仓库目录运行: `pip3 install -r requirement.txt`，然后再你的`.py`文件中导入使用。
 
+1. 直接爬取数据写入Excel
 ```python
 from pyhitokoto.hitokoto import Hito
 
@@ -32,6 +33,20 @@ hito.excel_name = 'example.xlsx' #输出的文件名(须为Excel后缀名)
 hito.run()
 
 ```
+
+2. 只获取数据，返回三个列表
+```python
+from pyhitokoto.hitokoto import Hito
+
+hito = Hito()
+
+hito.count = 20 #爬取的句子数量 (只获取数据可以不需要Excel名)
+
+hito_list, from_list, who_list = hito.get_list() 
+#上行变量含义分别是: 一言列表、来源列表、作者列表
+```
+
+### P.S: 导出的作者列表如果为 None ，我都直接替换为 未知 了。
 
 ## 最后
 

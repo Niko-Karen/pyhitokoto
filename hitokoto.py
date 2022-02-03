@@ -15,9 +15,7 @@ class Hito(object):
         self.headers = {
             'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/97.0.4692.99 Safari/537.36'
         }
-        self.from_list = []
-        self.who_list = []
-        self.hito_list = []
+
         self.count = 0
         self.excel_name = ''
 
@@ -47,6 +45,10 @@ class Hito(object):
 
     def get_list(self):
 
+        from_list = []
+        who_list = []
+        hito_list = []
+
         with alive_bar(self.count, title="缓存数据中……") as download:
 
             for i in range(self.count):
@@ -54,15 +56,17 @@ class Hito(object):
                 resp = requests.get('https://v1.hitokoto.cn/', headers=self.headers)
                 data = json.loads(resp.text)
 
-                self.hito_list.append(data['hitokoto'])
-                self.who_list.append(data['from_who'])
-                self.from_list.append(data['from'])
+                hito_list.append(data['hitokoto'])
+                who_list.append(data['from_who'])
+                from_list.append(data['from'])
 
                 download()
 
         for who in self.who_list:
             if who == None:
-                self.who_list[self.who_list.index(who)] = '未知'
+                who_list[who_list.index(who)] = '未知'
+
+        return hito_list, from_list, who_list
 
     def write_to_excel(self, hito_list, who_list, from_list):
 
@@ -95,7 +99,5 @@ class Hito(object):
         excel.save(self.excel_name)
 
     def run(self):
-        self.get_list()
-        self.write_to_excel(self.hito_list, self.who_list, self.from_list)
-
-
+        hito_list, from_list, who_list = self.get_list()
+        self.write_to_excel(hito_list, who_list, from_list)
