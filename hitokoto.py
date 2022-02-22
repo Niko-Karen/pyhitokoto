@@ -21,6 +21,10 @@ class Hito(object):
         self.count = 0
         self.excel_name = ''
         self.csv_name = ''
+        
+        self.from_list = []
+        self.who_list = []
+        self.hito_list = []
 
     def get_argv(self):
         argv = sys.argv[1:]
@@ -50,9 +54,6 @@ class Hito(object):
 
     def get_list(self):
 
-        from_list = []
-        who_list = []
-        hito_list = []
 
         with alive_bar(self.count, title="缓存数据中……") as download:
             for i in range(self.count):
@@ -70,9 +71,9 @@ class Hito(object):
                     self.count += 1
                     continue
 
-                hito_list.append(str(data['hitokoto']))
-                who_list.append(data['from_who'])
-                from_list.append(str(data['from']))
+                self.hito_list.append(str(data['hitokoto']))
+                self.who_list.append(data['from_who'])
+                self.from_list.append(str(data['from']))
 
                 download()
 
@@ -81,9 +82,9 @@ class Hito(object):
                 who_list[who_list.index(who)] = '未知'
         time.sleep(0.1)
 
-        return hito_list, from_list, who_list
+        return self.hito_list, self.from_list, self.who_list
 
-    def write_to_excel(self, hito_list, who_list, from_list):
+    def write_to_excel(self):
 
         # 创建Workbook
         excel = xlwt.Workbook(encoding='utf-8')
@@ -107,9 +108,9 @@ class Hito(object):
                     save()
                     save.text("正在写入: {}".format(data))
 
-        write_data(0, hito_list, '一言')
-        write_data(1, from_list, '出处')
-        write_data(2, who_list, '作者')
+        write_data(0, self.hito_list, '一言')
+        write_data(1, self.from_list, '出处')
+        write_data(2, self.who_list, '作者')
 
         excel.save(self.excel_name)
 
@@ -155,8 +156,7 @@ class Hito(object):
             	time.sleep(1)
 	
     def run(self):
-        hito_list, from_list, who_list = self.get_list()
-        self.write_to_excel(hito_list, who_list, from_list)
+        self.write_to_excel()
         self.write_to_csv()
 
 
