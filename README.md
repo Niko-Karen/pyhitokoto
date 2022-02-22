@@ -30,7 +30,8 @@ hito = Hito()
 hito.count = 20 #爬取的句子数量
 hito.excel_name = 'example.xlsx' #输出的文件名(须为Excel后缀名)
 
-hito.run()
+# hito.run() 现更新CSV格式后，不建议直接使用run函数，因为run函数会分别写入Excel和CSV，需分别输入Excel和CSV文件名
+hito.write_to_excel() # 可直接调用write_to_excel函数写入
 
 ```
 
@@ -44,6 +45,17 @@ hito.count = 20 #爬取的句子数量 (只获取数据可以不需要Excel名)
 
 hito_list, from_list, who_list = hito.get_list() 
 #上行变量含义分别是: 一言列表、来源列表、作者列表
+```
+3. 写入进`CSV`文件中
+```python
+from pyhitokoto.hitokoto import Hito
+
+hito = Hito()
+
+hito.count = 20 
+hito.csv_name = 'example.csv' #CSV 输出文件名（需为.csv文件后缀）
+hito.write_to_csv() # 写入CSV
+
 ```
 
 ### P.S: 导出的作者列表如果为 None ，我都直接替换为 未知 了。
