@@ -21,7 +21,7 @@ class Hito(object):
         self.count = 0
         self.excel_name = ''
         self.csv_name = ''
-        
+
         self.from_list = []
         self.who_list = []
         self.hito_list = []
@@ -32,9 +32,7 @@ class Hito(object):
             return False
 
         try:
-            opts, args = getopt.getopt(
-                argv, "hc:e:", [
-                    "help", "count=", "excel="])
+            opts, args = getopt.getopt(argv, "hc:e:", ["help", "count=", "excel="])
         except getopt.GetoptError:
             print('Error: hitokoto.py -c <quantity> -e <excel file name>')
             print('   or: test_arg.py --count=<quantity> --excel=<excel file name>')
@@ -54,13 +52,12 @@ class Hito(object):
 
     def get_list(self):
 
-
         with alive_bar(self.count, title="缓存数据中……") as download:
             for i in range(self.count):
 
                 resp = requests.get(
-                    'https://v1.hitokoto.cn/',
-                    headers=self.headers).text
+                    'https://v1.hitokoto.cn/', headers=self.headers
+                ).text
 
                 if resp == '':
                     self.count += 1
@@ -77,9 +74,9 @@ class Hito(object):
 
                 download()
 
-        for who in who_list:
+        for who in self.who_list:
             if who is None:
-                who_list[who_list.index(who)] = '未知'
+                self.who_list[self.who_list.index(who)] = '未知'
         time.sleep(0.1)
 
         return self.hito_list, self.from_list, self.who_list
@@ -118,45 +115,43 @@ class Hito(object):
         with alive_bar(self.count, title="写入数据中……") as csv_down:
             for i in range(self.count):
 
-            	resp = requests.get(
-                	'https://v1.hitokoto.cn/',
-                	headers=self.headers).text
-	
-            	if resp == '':
-                	self.count += 1
-                	continue
-            	try:
-                	data = json.loads(resp)
-            	except Exception:
-                	self.count += 1
-                	continue
-	
-            	hito = str(data['hitokoto'])
-            	who = data['from_who']
-            	from_who = str(data['from'])
-	
-            	if who is None:
-                	who = '未知'
-	
-            	# all_list = list({hito for hito in hito_list : [who for who in
-            	# who_list, from_who for from_who in from_list]})
-            	all_list = [hito, who, from_who]
-	
-            	if exists(self.csv_name):
-            		mode = 'a'
-            	else:
-            		mode = 'w'
-	
-            	with open(self.csv_name, mode=mode) as csv_h:
-                	writer = csv.writer(csv_h)
-                	writer.writerow(all_list)
-	
-            	csv_down()
-	
-            	time.sleep(1)
-	
+                resp = requests.get(
+                    'https://v1.hitokoto.cn/', headers=self.headers
+                ).text
+
+                if resp == '':
+                    self.count += 1
+                    continue
+                try:
+                    data = json.loads(resp)
+                except Exception:
+                    self.count += 1
+                    continue
+
+                hito = str(data['hitokoto'])
+                who = data['from_who']
+                from_who = str(data['from'])
+
+                if who is None:
+                    who = '未知'
+
+                # all_list = list({hito for hito in hito_list : [who for who in
+                # who_list, from_who for from_who in from_list]})
+                all_list = [hito, who, from_who]
+
+                if exists(self.csv_name):
+                    mode = 'a'
+                else:
+                    mode = 'w'
+
+                with open(self.csv_name, mode=mode) as csv_h:
+                    writer = csv.writer(csv_h)
+                    writer.writerow(all_list)
+
+                csv_down()
+
+                time.sleep(1)
+
     def run(self):
         self.write_to_excel()
         self.write_to_csv()
-
-
